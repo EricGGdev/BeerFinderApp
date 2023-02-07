@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="beer"
+            type="com.ericggdev.beerfinderapp.domain.models.Beer" />
+
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="16dp"
+        android:elevation="5dp"
+        app:cardBackgroundColor="@color/primary"
+        app:cardCornerRadius="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/image_beer"
+                android:layout_width="120dp"
+                android:layout_height="0dp"
+                android:contentDescription="@null"
+                android:paddingVertical="10dp"
+                android:paddingHorizontal="10dp"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/image_beer_placeholder" />
+
+            <TextView
+                android:id="@+id/text_name"
+                style="@style/text_large_bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@{beer.name}"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image_beer"
+                app:layout_constraintTop_toTopOf="@id/image_beer"
+                tools:text="Beer Name" />
+
+
+            <TextView
+                android:id="@+id/text_description"
+                style="@style/text_body_regular"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:text="@{beer.description  + ` - ` + beer.brewers_tips}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/text_name"
+                app:layout_constraintTop_toBottomOf="@id/text_name"
+                tools:text="EXAMPLE TEXT" />
+
+            <LinearLayout
+                android:id="@+id/linear_attenuation_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="@id/text_description"
+                app:layout_constraintTop_toBottomOf="@id/text_description">
+
+                <View
+                    android:id="@+id/circle_color"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/circle" />
+
+                <TextView
+                    android:id="@+id/text_attenuation_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@{`Attenuation level - ` + beer.attenuation_level}"
+                    style="@style/text_body_regular"
+                    tools:text="Attenuation level - 85" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_tagline"
+                style="@style/text_large_bold"
+                android:textColor="@color/white"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="@{beer.tagline}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/text_name"
+                app:layout_constraintTop_toBottomOf="@id/linear_attenuation_level"
+                tools:text="Owner" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
