@@ -10,13 +10,18 @@ class BeerRepositoryImpl @Inject constructor(
     private val remoteDatasource: BeerRemoteDataSource
 ) : BeerRepository {
 
-    override suspend fun getBeers(refresh: Boolean):List<Beer> {
-        return remoteDatasource.getBeers()
+    override suspend fun getBeers(page: Int): List<Beer> {
+        return remoteDatasource.getBeers(page)
             .map {
                 it.toBeer()
             }
     }
-
+    override suspend fun getBeersByName(beerName: String): List<Beer> {
+        return remoteDatasource.getBeersByName(beerName)
+            .map {
+                it.toBeer()
+            }
+    }
     override suspend fun getBeer(id: Int): Beer {
         TODO("Not yet implemented")
     }

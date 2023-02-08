@@ -43,7 +43,7 @@ class BeersAdapter(
 
             binding.circleColor.background.overrideColor(
                 context.getColor(
-                    when (beer.attenuation_level) {
+                    when (beer.attenuationLevel ?: 0.0) {
                         in 0.0..50.0 -> R.color.light_green
                         in 51.0..75.0 -> R.color.light_yellow
                         in 76.0..Double.MAX_VALUE -> R.color.red
@@ -53,7 +53,7 @@ class BeersAdapter(
             )
 
             Glide.with(context)
-                .load(beer.image_url)
+                .load(beer.imageUrl)
                 .placeholder(R.drawable.image_beer_placeholder)
                 .into(binding.imageBeer)
 

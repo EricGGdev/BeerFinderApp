@@ -5,11 +5,11 @@ import com.ericggdev.beerfinderapp.domain.repository.BeerRepository
 import com.ericggdev.beerfinderapp.domain.helpers.extension.resultOf
 import javax.inject.Inject
 
-class GetBeersUseCase @Inject constructor(
+class GetBeersByNameUseCase @Inject constructor(
     private val beerRepository: BeerRepository
 ) {
 
-    suspend operator fun invoke(page: Int = 1): Result<List<Beer>> = resultOf {
-        beerRepository.getBeers(page)
+    suspend operator fun invoke(beerName: String): Result<List<Beer>> = resultOf {
+        beerRepository.getBeersByName(beerName)
     }
 }

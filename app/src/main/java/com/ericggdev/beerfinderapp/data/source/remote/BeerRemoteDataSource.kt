@@ -16,4 +16,8 @@ class BeerRemoteDataSource @Inject constructor(
     suspend fun getBeers(page: Int = 1): List<BeerEntity> = withContext(Dispatchers.IO) {
          apiHandler { beerApi.getBeers(page) }
     }
+
+    suspend fun getBeersByName(name: String): List<BeerEntity> = withContext(Dispatchers.IO) {
+        apiHandler { beerApi.getBeersByName(name) }
+    }
 }

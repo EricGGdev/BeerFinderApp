@@ -1,4 +1,4 @@
-package com.ericggdev.beerfinderapp.helpers.extensions
+package com.ericggdev.beerfinderapp.domain.helpers.extension
 
 import com.ericggdev.beerfinderapp.domain.models.ResultError
 

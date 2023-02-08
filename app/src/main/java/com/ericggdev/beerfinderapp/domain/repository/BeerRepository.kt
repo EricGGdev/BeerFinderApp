@@ -4,7 +4,8 @@ import com.ericggdev.beerfinderapp.domain.models.Beer
 
 interface BeerRepository {
 
-    suspend fun getBeers(refresh: Boolean = true):List<Beer>
+    suspend fun getBeers(page: Int = 1): List<Beer>
 
+    suspend fun getBeersByName(beerName: String): List<Beer>
     suspend fun getBeer(id: Int): Beer
 }

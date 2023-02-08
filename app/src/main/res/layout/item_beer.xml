@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:text="@{beer.description  + ` - ` + beer.brewers_tips}"
+                android:text="@{beer.description  + ` - ` + beer.brewersTips}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/text_name"
                 app:layout_constraintTop_toBottomOf="@id/text_name"
@@ -89,7 +89,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@{`Attenuation level - ` + beer.attenuation_level}"
+                    android:text="@{`Attenuation level - ` + beer.attenuationLevel}"
                     style="@style/text_body_regular"
                     tools:text="Attenuation level - 85" />
 

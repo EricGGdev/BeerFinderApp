@@ -13,6 +13,7 @@ object Constants {
     const val SERVER_TIMEOUT_CODE = 408
     const val SERVER_CONFLICT_CODE = 409
     const val SERVER_INTERNALSERVER_CODE = 500
-
     const val RETRY_TIME_IN_MILLIS = 10000L
+
+    const val PAGE_MAX_VALUE = 13
 }
