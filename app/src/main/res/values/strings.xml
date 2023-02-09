@@ -7,5 +7,15 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <!-- COMMON -->
+    <string name="common_cancel">OK</string>
+    <string name="common_accept">Reintentar</string>
+
+    <!-- ERROR -->
+    <string name="error_tittle">Ha ocurrido un error</string>
+    <string name="user_general_error">Se ha producido un error en el servicio, por favor, vuelve a intentarlo mas tarde</string>
+
     <string name="text_to_find">Texto a buscar</string>
+
+
 </resources>

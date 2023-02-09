@@ -1,6 +1,8 @@
 package com.ericggdev.beerfinderapp.domain.models
 
-data class Beer(
+import java.io.Serializable
+
+class Beer(
     val abv: Double?,
     val attenuationLevel: Double?,
     val boilVolume: BoilVolume?,
@@ -22,57 +24,57 @@ data class Beer(
     val targetFg: Int?,
     val targetOg: Double?,
     val volume: Volume?
-)
+): Serializable
 
-data class BoilVolume(
+ class BoilVolume(
     val unit: String?,
     val value: Int?
-)
+): Serializable
 
-data class Ingredients(
+ class Ingredients(
     val hops: List<Hop>?,
     val malt: List<Malt>?,
     val yeast: String?
-)
+): Serializable
 
-data class Hop(
+ class Hop(
     val add: String?,
     val amount: Amount?,
     val attribute: String?,
     val name: String?
-)
+): Serializable
 
-data class Malt(
+ class Malt(
     val amount: Amount?,
     val name: String?
-)
+): Serializable
 
-data class Method(
+ class Method(
     val fermentation: Fermentation?,
     val mashTemp: List<MashTemp>?,
     val twist: String?
-)
+): Serializable
 
-data class MashTemp(
+ class MashTemp(
     val duration: Int?,
     val temp: Temp?
-)
+): Serializable
 
-data class Temp(
+ class Temp(
     val unit: String?,
     val value: Int?
-)
+): Serializable
 
-data class Volume(
+ class Volume(
     val unit: String?,
     val value: Int?
-)
+): Serializable
 
-data class Fermentation(
+ class Fermentation(
     val temp: Temp?
-)
+): Serializable
 
-data class Amount(
+ class Amount(
     val unit: String?,
     val value: Double?
-)
+): Serializable

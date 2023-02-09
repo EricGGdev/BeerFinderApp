@@ -22,8 +22,5 @@ class BeerRepositoryImpl @Inject constructor(
                 it.toBeer()
             }
     }
-    override suspend fun getBeer(id: Int): Beer {
-        TODO("Not yet implemented")
-    }
 
 }

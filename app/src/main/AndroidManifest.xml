@@ -24,6 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".ui.detail.DetailActivity"
+            android:theme="@style/Theme.BeerFinderApp.NoActionBar"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

@@ -7,5 +7,4 @@ interface BeerRepository {
     suspend fun getBeers(page: Int = 1): List<Beer>
 
     suspend fun getBeersByName(beerName: String): List<Beer>
-    suspend fun getBeer(id: Int): Beer
 }

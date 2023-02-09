@@ -1,21 +1,37 @@
 package com.ericggdev.beerfinderapp.ui.main
 
+import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doOnTextChanged
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ericggdev.beerfinderapp.R
 import com.ericggdev.beerfinderapp.databinding.ActivityMainBinding
+import com.ericggdev.beerfinderapp.databinding.DialogCustomLayoutBinding
+import com.ericggdev.beerfinderapp.domain.models.Beer
+import com.ericggdev.beerfinderapp.domain.models.Empty
+import com.ericggdev.beerfinderapp.domain.models.ResultError
+import com.ericggdev.beerfinderapp.domain.models.RetrofitError
+import com.ericggdev.beerfinderapp.domain.models.isEmpty
 import com.ericggdev.beerfinderapp.helpers.extensions.emptyString
+import com.ericggdev.beerfinderapp.helpers.extensions.showErrorDialog
+import com.ericggdev.beerfinderapp.ui.detail.DetailActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -31,6 +47,7 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         binding.activity = this
+        binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
         setContentView(binding.root)
@@ -46,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         binding.swipeRefresh.setOnRefreshListener {
             if (binding.editTextFinder.text.toString() == String.emptyString()) {
                 viewModel.getInitialBeers()
-            }else{
+            } else {
                 binding.swipeRefresh.isRefreshing = false
             }
         }
@@ -56,7 +73,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.floatingButtonSearch.setOnClickListener {
-            binding.textLayoutFinder.visibility = if(binding.textLayoutFinder.visibility == View.GONE) View.VISIBLE else View.GONE
+            binding.textLayoutFinder.visibility = if (binding.textLayoutFinder.visibility == View.GONE) View.VISIBLE else View.GONE
             checkFloatingMenu()
         }
 
@@ -65,20 +82,11 @@ class MainActivity : AppCompatActivity() {
                 val layoutManager = (recyclerView.layoutManager as LinearLayoutManager)
                 val listSize = (recyclerView.adapter as BeersAdapter).currentList.size
 
-                if (layoutManager.findLastVisibleItemPosition() >= listSize - 2 && !viewModel.isCallInProgress && binding.editTextFinder.text.toString() == String.emptyString()) {
+                if (layoutManager.findLastVisibleItemPosition() >= listSize - 2 && !viewModel.isCallInProgress && viewModel.textToSearch.value == String.emptyString()) {
                     viewModel.getNextBeersPage()
                 }
-
             }
         })
-
-        binding.editTextFinder.doOnTextChanged { text, _, _, _ ->
-            if (text.toString() != String.emptyString()) {
-                viewModel.findBeerByName(text.toString())
-            } else {
-                viewModel.getInitialBeers()
-            }
-        }
 
 
     }
@@ -97,9 +105,29 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             viewModel.uiState
                 .collect {
-                    if (it.items.isNotEmpty())
-                        (binding.beerList.adapter as? BeersAdapter)?.submitList(it.items)
+                    (binding.beerList.adapter as? BeersAdapter)?.submitList(it.items)
                 }
+        }
+
+        lifecycleScope.launch {
+            viewModel.uiState
+                .map { it.error }
+                .distinctUntilChanged()
+                .collect { error ->
+                    if (!error.isEmpty())
+                        showErrorDialog(
+                            getString(R.string.user_general_error),
+                            onPositive = { viewModel.getInitialBeers() },
+                            onNegative = {}
+                        )
+                }
+        }
+
+
+        lifecycleScope.launch {
+            viewModel.textToSearch.collect { text ->
+                if (text != String.emptyString()) viewModel.findBeerByName(text) else viewModel.getInitialBeers()
+            }
         }
     }
 
@@ -110,7 +138,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initAdapter() {
         val adapter = BeersAdapter { clickedBeer ->
-            //TODO goToDetail(clickedBeer.id)
+            goToDetail(clickedBeer)
         }
         adapter.setHasStableIds(true)
         binding.beerList.layoutManager = LinearLayoutManager(this)
@@ -143,6 +171,12 @@ class MainActivity : AppCompatActivity() {
             binding.shimmerViewContainer.visibility = View.GONE
             binding.swipeRefresh.visibility = View.VISIBLE
         }
+    }
+
+    private fun goToDetail(beer: Beer) {
+        startActivity(Intent(this, DetailActivity::class.java).apply {
+            putExtra(DetailActivity.INTENT_BEER, beer)
+        })
     }
 
 }

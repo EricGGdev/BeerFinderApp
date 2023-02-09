@@ -8,6 +8,9 @@
         <variable
             name="activity"
             type="com.ericggdev.beerfinderapp.ui.main.MainActivity" />
+        <variable
+            name="viewModel"
+            type="com.ericggdev.beerfinderapp.ui.main.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -61,6 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/text_to_find"
+                android:text="@={viewModel.textToSearch}"
                 android:imeOptions="actionDone"
                 android:inputType="text"
                 android:maxLines="1" />

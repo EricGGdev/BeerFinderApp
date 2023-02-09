@@ -22,17 +22,20 @@ data class BeersUiState(
 )
 
 @HiltViewModel
-class MainViewModel  @Inject constructor(
+class MainViewModel @Inject constructor(
     private val getBeersUseCase: GetBeersUseCase,
     private val getBeersByNameUseCase: GetBeersByNameUseCase
-): ViewModel() {
+) : ViewModel() {
 
     val uiState by lazy {
         MutableStateFlow(BeersUiState(isLoading = true))
     }
+
+    val textToSearch: MutableStateFlow<String> = MutableStateFlow("")
     private var lastPageLoaded = 1
     var isCallInProgress = false
     var isFloatingDeployed = false
+
     init {
         getInitialBeers()
     }
@@ -44,26 +47,33 @@ class MainViewModel  @Inject constructor(
             val result = getBeersUseCase()
             result.onSuccess { list ->
                 setSuccessState(list)
+                setLoadingState(false)
             }
-            result.onFailure {error ->
+            result.onFailure { error ->
+                setErrorState(error as ResultError)
+                setLoadingState(false)
             }
         }
     }
 
-    fun findBeerByName(text:String) {
+    fun findBeerByName(text: String) {
         setLoadingState(true)
         lastPageLoaded = 1
         viewModelScope.launch {
             val result = getBeersByNameUseCase(text)
             result.onSuccess { list ->
                 setSuccessState(list)
+                setLoadingState(false)
             }
-            result.onFailure {error ->
+            result.onFailure { error ->
+                setErrorState(error as ResultError)
+                setLoadingState(false)
             }
         }
     }
-    fun getNextBeersPage(){
-        if( lastPageLoaded < PAGE_MAX_VALUE){
+
+    fun getNextBeersPage() {
+        if (lastPageLoaded < PAGE_MAX_VALUE) {
             isCallInProgress = true
             lastPageLoaded = lastPageLoaded.inc()
             val alreadyLoadedBeers = uiState.value.items
@@ -74,18 +84,28 @@ class MainViewModel  @Inject constructor(
                     isCallInProgress = false
                 }
                 result.onFailure { error ->
-                    Log.e("asdas","asdas")
+                    setErrorState(error as ResultError)
                     isCallInProgress = false
                 }
             }
         }
     }
+
     private fun setSuccessState(list: List<Beer>) {
         uiState.update {
             it.copy(
                 items = list,
                 isLoading = false,
                 error = Empty
+            )
+        }
+    }
+
+    private fun setErrorState(error: ResultError) {
+        uiState.update {
+            it.copy(
+                error = error,
+                isLoading = false
             )
         }
     }
@@ -97,7 +117,6 @@ class MainViewModel  @Inject constructor(
             )
         }
     }
-
 
 
 }
